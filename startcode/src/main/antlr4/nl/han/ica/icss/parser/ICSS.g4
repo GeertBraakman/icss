@@ -49,6 +49,7 @@ tagSelector: LOWER_IDENT;
 idSelector: ID_IDENT;
 classSelector: CLASS_IDENT;
 ifClause: IF BOX_BRACKET_OPEN (variableReference| booleanLiteral) BOX_BRACKET_CLOSE OPEN_BRACE (decleration | ifClause)+ CLOSE_BRACE;
+
 decleration: LOWER_IDENT COLON expression SEMICOLON;
 expression: literal | variableReference | operation;
 
