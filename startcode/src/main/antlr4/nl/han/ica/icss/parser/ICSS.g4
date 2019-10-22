@@ -50,8 +50,8 @@ selector: (tagSelector | idSelector | classSelector) (COMMA selector)*;
 tagSelector: LOWER_IDENT;
 idSelector: ID_IDENT;
 classSelector: CLASS_IDENT;
-ifClause: IF BOX_BRACKET_OPEN (variableReference| booleanLiteral) BOX_BRACKET_CLOSE OPEN_BRACE (decleration | ifClause)+ CLOSE_BRACE elseClause?;
-elseClause: ELSE OPEN_BRACE (decleration | ifClause)+ CLOSE_BRACE;
+ifClause: IF BOX_BRACKET_OPEN (variableReference| booleanLiteral) BOX_BRACKET_CLOSE OPEN_BRACE (variableAssignment | decleration | ifClause)+ CLOSE_BRACE elseClause?;
+elseClause: ELSE OPEN_BRACE (variableAssignment | decleration | ifClause)+ CLOSE_BRACE;
 
 decleration: propertyName COLON expression SEMICOLON;
 propertyName: LOWER_IDENT;

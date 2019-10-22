@@ -88,7 +88,6 @@ public class Checker {
 
             String propertyName = declaration.property.name;
 
-
             if (propertyName.equals("color") || propertyName.equals("background-color")) {
                 if (!(expressionType == ExpressionType.COLOR)) {
                     declaration.expression.setError("Declarations for '" + propertyName + "' can only use COLOR Literals.");
