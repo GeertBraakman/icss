@@ -40,7 +40,7 @@ public class PercentageLiteral extends Literal {
 
     @Override
     public String toString() {
-        return new StringBuilder(value).append("%").toString();
+        return value + "%";
     }
 
 }

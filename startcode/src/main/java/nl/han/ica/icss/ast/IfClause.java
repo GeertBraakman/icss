@@ -8,6 +8,7 @@ public class IfClause extends ASTNode {
 
     public Expression conditionalExpression;
     public ArrayList<ASTNode> body = new ArrayList<>();
+    public ElseClause elseClause;
 
     public IfClause() { }
 
@@ -26,6 +27,8 @@ public class IfClause extends ASTNode {
         ArrayList<ASTNode> children = new ArrayList<>();
         children.add(conditionalExpression);
         children.addAll(body);
+        if(elseClause != null)
+         children.add(elseClause);
 
         return children;
     }
@@ -34,6 +37,8 @@ public class IfClause extends ASTNode {
     public ASTNode addChild(ASTNode child) {
         if(child instanceof Expression)
             conditionalExpression  = (Expression) child;
+        else if (child instanceof ElseClause)
+            elseClause = (ElseClause) child;
         else
             body.add(child);
 

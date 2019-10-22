@@ -40,7 +40,7 @@ public class PixelLiteral extends Literal {
 
     @Override
     public String toString() {
-        return new StringBuilder(value).append("px").toString();
+        return value + "px";
     }
 
 }
