@@ -2,6 +2,7 @@ package nl.han.ica.icss.checker;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import nl.han.ica.icss.ast.*;
 import nl.han.ica.icss.ast.operations.MultiplyOperation;
@@ -144,7 +145,8 @@ public class Checker {
     }
 
     private ExpressionType findExpressionType(VariableReference variableReference) {
-        for (HashMap<String, ExpressionType> map : variableTypes) {
+        for (int i = variableTypes.size()-1; i >= 0; i--) {
+            Map<String, ExpressionType> map = variableTypes.get(i);
             if (map.containsKey(variableReference.name)) {
                 return map.get(variableReference.name);
             }

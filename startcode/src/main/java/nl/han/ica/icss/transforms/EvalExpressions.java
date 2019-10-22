@@ -7,11 +7,9 @@ import nl.han.ica.icss.ast.literals.ScalarLiteral;
 import nl.han.ica.icss.ast.operations.AddOperation;
 import nl.han.ica.icss.ast.operations.MultiplyOperation;
 import nl.han.ica.icss.ast.operations.SubtractOperation;
+import nl.han.ica.icss.ast.types.ExpressionType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class EvalExpressions implements Transform {
 
@@ -55,7 +53,8 @@ public class EvalExpressions implements Transform {
             return (Literal) expression;
         } else if (expression instanceof VariableReference) {
             VariableReference variableReference = (VariableReference) expression;
-            for (HashMap<String, Literal> map : variableValues) {
+            for (int i = variableValues.size()-1; i >= 0; i--) {
+                Map<String, Literal> map = variableValues.get(i);
                 if (map.containsKey(variableReference.name)) {
                     return map.get(variableReference.name);
                 }

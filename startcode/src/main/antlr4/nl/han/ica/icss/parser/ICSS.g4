@@ -43,21 +43,20 @@ ASSIGNMENT_OPERATOR: ':=';
 //--- PARSER: ---
 
 stylesheet: (variableAssignment| styleRule)+;
-styleRule: selector OPEN_BRACE (variableAssignment | decleration | ifClause)+ CLOSE_BRACE;
+styleRule: selector OPEN_BRACE body+ CLOSE_BRACE;
 variableAssignment: variableReference ASSIGNMENT_OPERATOR expression SEMICOLON;
 variableReference: CAPITAL_IDENT;
 selector: (tagSelector | idSelector | classSelector) (COMMA selector)*;
 tagSelector: LOWER_IDENT;
 idSelector: ID_IDENT;
 classSelector: CLASS_IDENT;
-ifClause: IF BOX_BRACKET_OPEN (variableReference| booleanLiteral) BOX_BRACKET_CLOSE OPEN_BRACE (variableAssignment | decleration | ifClause)+ CLOSE_BRACE elseClause?;
-elseClause: ELSE OPEN_BRACE (variableAssignment | decleration | ifClause)+ CLOSE_BRACE;
-
+ifClause: IF BOX_BRACKET_OPEN (variableReference| booleanLiteral) BOX_BRACKET_CLOSE OPEN_BRACE body+ CLOSE_BRACE elseClause?;
+elseClause: ELSE OPEN_BRACE body+ CLOSE_BRACE;
+body: variableAssignment | decleration | ifClause;
 decleration: propertyName COLON expression SEMICOLON;
 propertyName: LOWER_IDENT;
 expression: literal | variableReference | operation;
-
-operation: (addOperation | multiplyOperation | subtractOperation) ((literal | variableReference) | operation);
+operation: (addOperation | multiplyOperation | subtractOperation) expression;
 literal: pixelLiteral | colorLiteral | booleanLiteral | scalarLiteral | percentageLiteral;
 addOperation: (literal | variableReference) PLUS;
 subtractOperation: (literal | variableReference) MIN;
