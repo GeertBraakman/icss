@@ -7,10 +7,11 @@ import nl.han.ica.icss.ast.literals.ScalarLiteral;
 import nl.han.ica.icss.ast.operations.AddOperation;
 import nl.han.ica.icss.ast.operations.MultiplyOperation;
 import nl.han.ica.icss.ast.operations.SubtractOperation;
-import nl.han.ica.icss.ast.types.ExpressionType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 public class EvalExpressions implements Transform {
 
@@ -24,15 +25,17 @@ public class EvalExpressions implements Transform {
 
     private void evalExpressions(ASTNode root) {
         HashMap<String, Literal> map = new HashMap<>();
+        List<ASTNode> toRemove = new ArrayList<>();
         for (ASTNode child : root.getChildren()) {
             if (child instanceof VariableAssignment) {
                 VariableAssignment variableAssignment = (VariableAssignment) child;
                 VariableReference variableReference = variableAssignment.name;
                 map.put(variableReference.name, getLiteral(variableAssignment.expression));
+                toRemove.add(child);
             }
 
             if (child instanceof Expression) {
-                root.removeChild(child);
+                toRemove.add(child);
                 root.addChild(getLiteral((Expression) child));
             }
 
@@ -40,6 +43,11 @@ public class EvalExpressions implements Transform {
             evalExpressions(child);
             variableValues.removeLast();
         }
+
+        for (ASTNode node : toRemove) {
+            root.removeChild(node);
+        }
+
     }
 
     private Literal getLiteral(Expression expression) {
@@ -47,8 +55,8 @@ public class EvalExpressions implements Transform {
             return (Literal) expression;
         } else if (expression instanceof VariableReference) {
             VariableReference variableReference = (VariableReference) expression;
-            for(HashMap<String, Literal> map: variableValues) {
-                if(map.containsKey(variableReference.name)){
+            for (HashMap<String, Literal> map : variableValues) {
+                if (map.containsKey(variableReference.name)) {
                     return map.get(variableReference.name);
                 }
             }
@@ -76,22 +84,21 @@ public class EvalExpressions implements Transform {
     }
 
     private int doOperation(Operation operation, int left, int right) {
-        if(operation instanceof AddOperation) {
+        if (operation instanceof AddOperation) {
             return left + right;
         } else if (operation instanceof SubtractOperation) {
-            return  left - right;
+            return left - right;
         } else if (operation instanceof MultiplyOperation) {
-            return  left * right;
-        } else {
-            return 0;
+            return left * right;
         }
+        return 0;
     }
 
-    private int getValue(Literal literal){
-        if(literal instanceof PixelLiteral) {
+    private int getValue(Literal literal) {
+        if (literal instanceof PixelLiteral) {
             return ((PixelLiteral) literal).value;
         } else if (literal instanceof PercentageLiteral) {
-            return  ((PercentageLiteral) literal).value;
+            return ((PercentageLiteral) literal).value;
         } else if (literal instanceof ScalarLiteral) {
             return ((ScalarLiteral) literal).value;
         }

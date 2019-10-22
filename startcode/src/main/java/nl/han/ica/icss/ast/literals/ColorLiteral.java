@@ -26,12 +26,16 @@ public class ColorLiteral extends Literal {
     }
     @Override
     public int hashCode() {
-
         return Objects.hash(value);
     }
 
     @Override
     public ExpressionType getExpressionType() {
         return ExpressionType.COLOR;
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 }

@@ -14,21 +14,35 @@ public class RemoveIf implements Transform {
     }
 
     private void removeIf(ASTNode root) {
-//        List<ASTNode> toAdd = new ArrayList<>();
+        List<ASTNode> toAdd = new ArrayList<>();
+
         for (ASTNode child : root.getChildren()) {
             if (child instanceof IfClause) {
-//                IfClause ifClause = (IfClause) child;
-//                if (getValue(ifClause.conditionalExpression)) {
-//                    toAdd.addAll(ifClause.body);
-//                }
-                root.removeChild(child);
+                IfClause ifClause = (IfClause) child;
+                toAdd.addAll(checkIfClause(ifClause));
+                root.removeChild(ifClause);
+            } else {
+                removeIf(child);
             }
-            removeIf(child);
         }
-//        for (ASTNode node: toAdd) {
-//            System.out.println("adding: " + node);
-//            root.addChild(node);
-//        }
+        for (ASTNode node : toAdd) {
+            root.addChild(node);
+        }
+    }
+
+    private ArrayList<ASTNode> checkIfClause(IfClause ifClause) {
+        ArrayList<ASTNode> astNodes = new ArrayList<>();
+        if (getValue(ifClause.conditionalExpression)) {
+
+            for (ASTNode node : ifClause.body) {
+                if (node instanceof IfClause) {
+                    astNodes.addAll(checkIfClause((IfClause) node));
+                } else {
+                    astNodes.add(node);
+                }
+            }
+        }
+        return astNodes;
     }
 
     private boolean getValue(Expression expression) {

@@ -37,4 +37,10 @@ public class PercentageLiteral extends Literal {
     public ExpressionType getExpressionType() {
         return ExpressionType.PERCENTAGE;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(value).append("%").toString();
+    }
+
 }

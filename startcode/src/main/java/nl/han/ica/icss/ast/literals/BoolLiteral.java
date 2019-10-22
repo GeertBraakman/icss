@@ -38,4 +38,9 @@ public class BoolLiteral extends Literal {
     public ExpressionType getExpressionType() {
         return ExpressionType.BOOL;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }

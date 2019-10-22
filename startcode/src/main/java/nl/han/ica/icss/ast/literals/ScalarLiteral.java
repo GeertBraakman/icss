@@ -37,4 +37,10 @@ public class ScalarLiteral extends Literal {
     public ExpressionType getExpressionType() {
         return ExpressionType.SCALAR;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
 }
