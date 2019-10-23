@@ -53,7 +53,7 @@ public class EvalExpressions implements Transform {
             return (Literal) expression;
         } else if (expression instanceof VariableReference) {
             VariableReference variableReference = (VariableReference) expression;
-            for (int i = variableValues.size()-1; i >= 0; i--) {
+            for (int i = variableValues.size() - 1; i >= 0; i--) {
                 Map<String, Literal> map = variableValues.get(i);
                 if (map.containsKey(variableReference.name)) {
                     return map.get(variableReference.name);

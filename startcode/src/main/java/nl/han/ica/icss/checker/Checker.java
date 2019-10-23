@@ -17,14 +17,14 @@ public class Checker {
         check(ast.root);
     }
 
-    private void check(ASTNode root) {
-        checkRuleUndefinedVariable(root);
-        checkRuleOperations(root);
-        checkRuleValidDeclarations(root);
-        checkRuleValidIfDeclaration(root);
+    private void check(ASTNode node) {
+        checkRuleUndefinedVariable(node);
+        checkRuleOperations(node);
+        checkRuleValidDeclarations(node);
+        checkRuleValidIfDeclaration(node);
 
         HashMap<String, ExpressionType> map = new HashMap<>();
-        for (ASTNode child : root.getChildren()) {
+        for (ASTNode child : node.getChildren()) {
             if (child instanceof VariableAssignment) {
                 VariableAssignment variableAssignment = (VariableAssignment) child;
                 VariableReference variableReference = variableAssignment.name;
