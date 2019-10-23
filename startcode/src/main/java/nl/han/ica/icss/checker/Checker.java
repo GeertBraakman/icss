@@ -24,6 +24,7 @@ public class Checker {
         checkRuleValidIfDeclaration(node);
 
         HashMap<String, ExpressionType> map = new HashMap<>();
+        variableTypes.addLast(map);
         for (ASTNode child : node.getChildren()) {
             if (child instanceof VariableAssignment) {
                 VariableAssignment variableAssignment = (VariableAssignment) child;
@@ -31,10 +32,9 @@ public class Checker {
                 variableReference.setExpressionType(getExpressionType(variableAssignment.expression));
                 map.put(variableReference.name, variableReference.getExpressionType());
             }
-            variableTypes.addLast(map);
             check(child);
-            variableTypes.removeLast();
         }
+        variableTypes.removeLast();
     }
 
     /**

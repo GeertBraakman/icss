@@ -7,7 +7,6 @@ import nl.han.ica.icss.ast.literals.ScalarLiteral;
 import nl.han.ica.icss.ast.operations.AddOperation;
 import nl.han.ica.icss.ast.operations.MultiplyOperation;
 import nl.han.ica.icss.ast.operations.SubtractOperation;
-import nl.han.ica.icss.ast.types.ExpressionType;
 
 import java.util.*;
 
@@ -24,6 +23,7 @@ public class EvalExpressions implements Transform {
     private void evalExpressions(ASTNode root) {
         HashMap<String, Literal> map = new HashMap<>();
         List<ASTNode> toRemove = new ArrayList<>();
+        variableValues.addLast(map);
         for (ASTNode child : root.getChildren()) {
             if (child instanceof VariableAssignment) {
                 VariableAssignment variableAssignment = (VariableAssignment) child;
@@ -36,12 +36,9 @@ public class EvalExpressions implements Transform {
                 toRemove.add(child);
                 root.addChild(getLiteral((Expression) child));
             }
-
-            variableValues.addLast(map);
             evalExpressions(child);
-            variableValues.removeLast();
         }
-
+        variableValues.removeLast();
         for (ASTNode node : toRemove) {
             root.removeChild(node);
         }
