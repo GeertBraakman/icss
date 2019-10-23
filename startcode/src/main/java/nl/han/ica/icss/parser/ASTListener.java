@@ -46,10 +46,10 @@ public class ASTListener extends ICSSBaseListener {
 		currentContainer.pop();
 	}
 
-	@Override public void enterVariableReference(ICSSParser.VariableReferenceContext ctx) {
+	@Override
+	public void enterVariableReference(ICSSParser.VariableReferenceContext ctx) {
 		currentContainer.peek().addChild(new VariableReference(ctx.getText()));
 	}
-
 
 	@Override
 	public void enterStyleRule(ICSSParser.StyleRuleContext ctx) {
@@ -112,7 +112,17 @@ public class ASTListener extends ICSSBaseListener {
 	}
 
 	@Override
-	public void exitOperation(ICSSParser.OperationContext ctx) {
+	public void exitMultiplyOperation(ICSSParser.MultiplyOperationContext ctx) {
+		currentContainer.pop();
+	}
+
+	@Override
+	public void exitSubtractOperation(ICSSParser.SubtractOperationContext ctx) {
+		currentContainer.pop();
+	}
+
+	@Override
+	public void exitAddOperation(ICSSParser.AddOperationContext ctx) {
 		currentContainer.pop();
 	}
 
@@ -165,16 +175,13 @@ public class ASTListener extends ICSSBaseListener {
 		currentContainer.pop();
 	}
 
-
 	@Override
 	public void exitIfClause(ICSSParser.IfClauseContext ctx) {
 		currentContainer.pop();
 	}
 
-
 	@Override
 	public void exitStylesheet(ICSSParser.StylesheetContext ctx) {
 		ast.root = (Stylesheet) currentContainer.pop();
 	}
-
 }
