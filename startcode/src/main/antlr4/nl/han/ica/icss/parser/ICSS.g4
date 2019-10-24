@@ -42,7 +42,7 @@ ASSIGNMENT_OPERATOR: ':=';
 
 //--- PARSER: ---
 
-stylesheet: (variableAssignment| styleRule)+;
+stylesheet: (variableAssignment | styleRule)+;
 styleRule: selector OPEN_BRACE body+ CLOSE_BRACE;
 variableAssignment: variableReference ASSIGNMENT_OPERATOR expression SEMICOLON;
 variableReference: CAPITAL_IDENT;
@@ -55,23 +55,19 @@ elseClause: ELSE OPEN_BRACE body+ CLOSE_BRACE;
 body: variableAssignment | decleration | ifClause;
 decleration: propertyName COLON expression SEMICOLON;
 propertyName: LOWER_IDENT;
-//expression: literal | variableReference | operation;
 
-
-expression: expression MUL expression #multiplyOperation
+expression:   expression MUL expression  #multiplyOperation
             | expression PLUS expression #addOperation
-            | expression MIN expression #subtractOperation
-            | variableReference #varRef
-            | lit #literal
-            ;
+            | expression MIN expression  #subtractOperation
+            | variableReference          #varReference
+            | literal                    #lit;
 
-//operation: (addOperation | multiplyOperation | subtractOperation) expression;
+literal: pixelLiteral
+       | colorLiteral
+       | booleanLiteral
+       | scalarLiteral
+       | percentageLiteral;
 
-
-lit: pixelLiteral | colorLiteral | booleanLiteral | scalarLiteral | percentageLiteral;
-//addOperation: (literal | variableReference) PLUS;
-//subtractOperation: (literal | variableReference) MIN;
-//multiplyOperation: (literal | variableReference) MUL;
 colorLiteral: COLOR;
 pixelLiteral: PIXELSIZE;
 scalarLiteral: SCALAR;

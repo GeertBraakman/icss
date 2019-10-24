@@ -1,5 +1,6 @@
 LinkColor := #ff0000;
 ParWidth := 500px;
+ParWidthDouble := ParWidth * 2;
 AdjustColor := TRUE;
 UseLinkColor := FALSE;
 
@@ -12,7 +13,7 @@ p {
 	    if[UseLinkColor]{
 	        background-color: LinkColor;
 	    } else {
-	        height: ParWidth + 50px;
+	        height: ParWidth
 	    }
 	}
 }
