@@ -24,7 +24,7 @@ public class Checker {
         checkRuleValidIfDeclaration(node);
 
         HashMap<String, ExpressionType> map = new HashMap<>();
-        variableTypes.addLast(map);
+        variableTypes.addFirst(map);
         for (ASTNode child : node.getChildren()) {
             if (child instanceof VariableAssignment) {
                 VariableAssignment variableAssignment = (VariableAssignment) child;
@@ -34,7 +34,7 @@ public class Checker {
             }
             check(child);
         }
-        variableTypes.removeLast();
+        variableTypes.removeFirst();
     }
 
     /**
@@ -83,20 +83,17 @@ public class Checker {
             Declaration declaration = (Declaration) node;
             ExpressionType expressionType = declaration.expression.getExpressionType();
 
-            if (expressionType == ExpressionType.UNDEFINED) {
+            if (expressionType == ExpressionType.UNDEFINED)
                 expressionType = getExpressionType(declaration.expression);
-            }
 
             String propertyName = declaration.property.name;
 
             if (propertyName.equals("color") || propertyName.equals("background-color")) {
-                if (!(expressionType == ExpressionType.COLOR)) {
+                if (expressionType != ExpressionType.COLOR)
                     declaration.expression.setError("Declarations for '" + propertyName + "' can only use COLOR Literals.");
-                }
             } else if (propertyName.equals("width") || propertyName.equals("height")) {
-                if (expressionType == ExpressionType.COLOR || expressionType == ExpressionType.SCALAR) {
+                if (expressionType == ExpressionType.COLOR || expressionType == ExpressionType.SCALAR)
                     declaration.expression.setError("Declarations for '" + propertyName + "' can only use PIXEL or PERCENTAGE Literals.");
-                }
             } else {
                 declaration.property.setError("Property '" + propertyName + "' is not a valid property.");
             }
@@ -145,8 +142,7 @@ public class Checker {
     }
 
     private ExpressionType findExpressionType(VariableReference variableReference) {
-        for (int i = variableTypes.size()-1; i >= 0; i--) {
-            Map<String, ExpressionType> map = variableTypes.get(i);
+        for (Map<String, ExpressionType> map: variableTypes) {
             if (map.containsKey(variableReference.name)) {
                 return map.get(variableReference.name);
             }
@@ -162,13 +158,13 @@ public class Checker {
 
         ExpressionType lhsType = operation.lhs.getExpressionType();
 
-        if (lhsType == ExpressionType.UNDEFINED) {
+        if (lhsType == ExpressionType.UNDEFINED || lhsType == null) {
             lhsType = getExpressionType(operation.lhs);
         }
 
         ExpressionType rhsType = operation.rhs.getExpressionType();
 
-        if (rhsType == ExpressionType.UNDEFINED) {
+        if (rhsType == ExpressionType.UNDEFINED || rhsType == null) {
             rhsType = getExpressionType(operation.rhs);
         }
 
@@ -180,7 +176,7 @@ public class Checker {
         }
 
         if (rhsType == ExpressionType.BOOL || lhsType == ExpressionType.BOOL) {
-            operation.setError("Calculation with colors is not allowed");
+            operation.setError("Calculation with booleans is not allowed");
             return ExpressionType.BOOL;
         }
 
@@ -199,7 +195,7 @@ public class Checker {
         }
 
         // Check if a Subtract or Add operation is done by the same type.
-        if (rhsType.equals(lhsType)) {
+        if (rhsType  == lhsType) {
             return rhsType;
         }
 

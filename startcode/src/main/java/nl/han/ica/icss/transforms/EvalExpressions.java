@@ -23,7 +23,7 @@ public class EvalExpressions implements Transform {
     private void evalExpressions(ASTNode root) {
         HashMap<String, Literal> map = new HashMap<>();
         List<ASTNode> toRemove = new ArrayList<>();
-        variableValues.addLast(map);
+        variableValues.addFirst(map);
         for (ASTNode child : root.getChildren()) {
             if (child instanceof VariableAssignment) {
                 VariableAssignment variableAssignment = (VariableAssignment) child;
@@ -38,7 +38,7 @@ public class EvalExpressions implements Transform {
             }
             evalExpressions(child);
         }
-        variableValues.removeLast();
+        variableValues.removeFirst();
         for (ASTNode node : toRemove) {
             root.removeChild(node);
         }
@@ -50,8 +50,7 @@ public class EvalExpressions implements Transform {
             return (Literal) expression;
         } else if (expression instanceof VariableReference) {
             VariableReference variableReference = (VariableReference) expression;
-            for (int i = variableValues.size() - 1; i >= 0; i--) {
-                Map<String, Literal> map = variableValues.get(i);
+            for (Map<String, Literal> map : variableValues) {
                 if (map.containsKey(variableReference.name)) {
                     return map.get(variableReference.name);
                 }
